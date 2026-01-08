@@ -1,1 +1,64 @@
-venv/ 
+# ======================================
+# Python
+# ======================================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+*.log
+*.sqlite3
+*.db
+
+# 가상환경
+venv/
+env/
+ENV/
+*.env
+
+# 캐시
+*.cache/
+*.pytest_cache/
+.ipynb_checkpoints/
+
+# ======================================
+# IDE / Editor
+# ======================================
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# ======================================
+# OS
+# ======================================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ======================================
+# Git LFS (선택)
+# ======================================
+# 대용량 모델이나 바이너리 파일을 올릴 때
+# *.pt
+# *.h5
+# *.ckpt
+
+# ======================================
+# Flutter / Dart
+# ======================================
+.build/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+*.lock
+*.iml
