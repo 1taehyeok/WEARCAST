@@ -1,8 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/providers/clothing_provider.dart';
+import '../../core/widgets/clothing_image.dart';
 import '../result/result_screen.dart';
 
-class ClothingScreen extends StatelessWidget {
+class ClothingScreen extends ConsumerWidget {
   final File personImage;
   final String? maskUrl;
   final String personId;
@@ -13,12 +16,6 @@ class ClothingScreen extends StatelessWidget {
     required this.maskUrl,
     required this.personId,
   });
-
-  final List<String> clothingSamples = const [
-    "https://upload.wikimedia.org/wikipedia/commons/2/24/Blue_Tshirt.jpg", 
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/24701-nature-natural-beauty.jpg/1280px-24701-nature-natural-beauty.jpg", // Just a random image distinct from first
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Circle_-_black_simple.svg/800px-Circle_-_black_simple.svg.png" // distinct pattern
-  ];
 
   void _onClothingSelected(BuildContext context, String clothingUrl) {
     Navigator.of(context).push(
@@ -34,31 +31,38 @@ class ClothingScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final clothingSamples = ref.watch(clothingProvider);
+
     return Scaffold(
       appBar: AppBar(title: const Text("Select Clothing")),
-      body: GridView.builder(
-        padding: const EdgeInsets.all(16),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-        ),
-        itemCount: clothingSamples.length,
-        itemBuilder: (context, index) {
-          final url = clothingSamples[index];
-          return GestureDetector(
-            onTap: () => _onClothingSelected(context, url),
-            child: Card(
-              clipBehavior: Clip.antiAlias,
-              child: Image.network(url, fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => 
-                  const Center(child: Icon(Icons.broken_image)),
+      body: clothingSamples.isEmpty
+          ? const Center(
+              child: Text(
+                "No clothing available.\nGo to Settings to add clothing.",
+                textAlign: TextAlign.center,
               ),
+            )
+          : GridView.builder(
+              padding: const EdgeInsets.all(16),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+              ),
+              itemCount: clothingSamples.length,
+              itemBuilder: (context, index) {
+                final url = clothingSamples[index];
+                return GestureDetector(
+                  onTap: () => _onClothingSelected(context, url),
+                  child: Card(
+                    clipBehavior: Clip.antiAlias,
+                    child: ClothingImage(path: url),
+                  ),
+                );
+              },
             ),
-          );
-        },
-      ),
     );
   }
 }
+
